@@ -1,0 +1,6 @@
+name: frozen-shrimp
+
+include:
+  - path:
+      - ../compose.yaml
+      - ./override.yaml
