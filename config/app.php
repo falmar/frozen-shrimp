@@ -172,6 +172,8 @@ return [
 
         // Third party providers
         \App\Libraries\Context\ContextProvider::class,
+        \App\Libraries\Hasher\HasherProvider::class,
+        \App\Domains\Carrefour\CarrefourProvider::class,
     ])->toArray(),
 
     /*

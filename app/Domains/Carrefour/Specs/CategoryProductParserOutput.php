@@ -2,8 +2,10 @@
 
 namespace App\Domains\Carrefour\Specs;
 
+use App\Domains\Carrefour\ValueObjects\CrawlCategoryProduct;
+
 class CategoryProductParserOutput
 {
-    /** @var array $content */
+    /** @var list<CrawlCategoryProduct> $products */
     public array $products = [];
 }

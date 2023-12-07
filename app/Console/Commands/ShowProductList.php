@@ -2,15 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Domains\Carrefour\CategoryCrawlerService;
-use App\Domains\Carrefour\CategoryParserService;
-use App\Domains\Carrefour\Specs\CategoryCrawlInput;
-use App\Domains\Carrefour\Specs\CategoryProductParserInput;
-use App\Libraries\Context\Context;
-use GuzzleHttp\Client;
+use App\Domains\Carrefour\CategoryRepositoryInterface;
+use App\Domains\Carrefour\Entities\Category;
+use App\Domains\Carrefour\Entities\Product;
+use App\Domains\Carrefour\ProductRepositoryInterface;
 use Illuminate\Console\Command;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ShowProductList extends Command
 {
@@ -31,50 +27,36 @@ class ShowProductList extends Command
     /**
      * Execute the console command.
      */
-    public function handle(Context $context)
-    {
+    public function handle(
+        CategoryRepositoryInterface $categoryRepository,
+        ProductRepositoryInterface $productRepository
+    ): void {
         try {
-            // Hyper Hoya de la Plata
-            // '005210|4600013||DRIVE|2'
+            /** @var Category|null $category */
+            $category = $categoryRepository->findByUrl($this->argument('url'));
 
-            // Drive Peatón MK Quevedo
-            // '005212|4700003||DRIVE|2'
+            if (is_null($category)) {
+                $this->error('Category not found');
+                return;
+            }
 
-            $salePoint = $this->option('salepoint') ?: '005212|4700003||DRIVE|2';
-            $host = parse_url($this->argument('url'), PHP_URL_HOST);
+            $products = $productRepository->listByCategoryId($category->id);
+            $products = array_map(
+                fn (Product $product) => [
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'image_url' => $product->imageURL,
+                    'url' => $product->url,
+                ],
+                $products
+            );
 
-            $crawler = new CategoryCrawlerService($this->getClient());
-            $parser = new CategoryParserService();
-
-            $crawlerSpec = new CategoryCrawlInput();
-            $crawlerSpec->url = $this->argument('url');
-            $crawlerSpec->headers = [
-                'Cookie' => "salepoint={$salePoint}; Domain={$host}; Path=/; SameSite=None",
-            ];
-
-            $crawlerOutput = $crawler->crawl($context, $crawlerSpec);
-
-            $parserSpec = new CategoryProductParserInput();
-            $parserSpec->url = $crawlerSpec->url;
-            $parserSpec->content = $crawlerOutput->content;
-
-            $parserOutput = $parser->products($context, $parserSpec);
-
-            $this->output->writeln(json_encode($parserOutput->products, JSON_PRETTY_PRINT));
+            $this->output->writeln(
+                json_encode($products, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)
+            );
         } catch (\Throwable $e) {
             $this->error($e->getMessage());
             return;
         }
-    }
-
-    private HttpClientInterface $client;
-
-    private function getClient(): HttpClientInterface
-    {
-        if (!isset($this->client)) {
-            $this->client = HttpClient::create();
-        }
-
-        return $this->client;
     }
 }

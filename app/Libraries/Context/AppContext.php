@@ -1,20 +1,14 @@
 <?php
 
-
 namespace App\Libraries\Context;
-
-
-use Psr\Http\Message\ServerRequestInterface;
 
 class AppContext implements Context
 {
-    private const REQUEST_CONTEXT_KEY = 'slim-skeleton/main-context';
-
-    /** @var array<string|int, mixed> */
+    /** @var array<string, mixed> */
     protected array $attributes = [];
 
     /**
-     * @param array<string|int, mixed> $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -59,29 +53,10 @@ class AppContext implements Context
         return new self($this->getAttributes());
     }
 
-    public static function withRequest(ServerRequestInterface $request, Context $context): ServerRequestInterface
-    {
-        return $request->withAttribute(
-            AppContext::REQUEST_CONTEXT_KEY,
-            $context
-        );
-    }
-
-    public static function fromRequest(ServerRequestInterface $request): ?Context
-    {
-        /** @var Context|null $ctx */
-        $ctx = $request->getAttribute(
-            AppContext::REQUEST_CONTEXT_KEY,
-            null
-        );
-
-        return $ctx;
-    }
-
     /**
      * Create base context
      *
-     * @param array<string|int, mixed> $attributes
+     * @param array<string, mixed> $attributes
      * @return Context
      */
     public static function background(array $attributes = []): Context

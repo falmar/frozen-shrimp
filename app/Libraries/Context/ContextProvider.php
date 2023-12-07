@@ -1,11 +1,8 @@
 <?php
 
-
 namespace App\Libraries\Context;
 
-
 use Illuminate\Support\ServiceProvider;
-use Psr\Container\ContainerInterface;
 
 class ContextProvider extends ServiceProvider
 {
