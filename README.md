@@ -107,3 +107,25 @@ $ php artisan test
 
 - Error handling, I would have created appropriate exception to manage errors for each service .
 - Zero logging. I would have implemented logging as a decorator for the services following the onion architecture like [go-kit](https://github.com/go-kit/examples/blob/master/profilesvc/middlewares.go#L11) does.
+
+### Running Locally
+
+```text
+# get into docker shell
+$ docker run --rm -it falmar/frozen-shrimp:latest sh
+
+# once inside the container
+$ php artisan save-product-list https://www.carrefour.es/supermercado/congelados/cat21449123/c
+$ php artisan show-product-list https://www.carrefour.es/supermercado/congelados/cat21449123/c
+```
+
+
+### Running Tests
+
+```text
+# get into docker shell
+$ docker run --rm -it falmar/frozen-shrimp:latest
+
+# once inside the container
+$ php artisan test
+```
