@@ -17,8 +17,6 @@ jobs:
     needs: test
     if: ${{ success() }}
     runs-on: ubuntu-22.04
-    container:
-      image: falmar/bitbucket:alpine-3.18
     steps:
       - uses: actions/checkout@v4
       - name: Setup PHP with Xdebug
