@@ -25,7 +25,7 @@ class SaveProductList extends Command
      *
      * @var string
      */
-    protected $signature = 'app:save-product-list {url} {--salepoint}';
+    protected $signature = 'save-product-list {url} {--salepoint}';
 
     /**
      * The console command description.

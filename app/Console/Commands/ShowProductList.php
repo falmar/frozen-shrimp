@@ -15,7 +15,7 @@ class ShowProductList extends Command
      *
      * @var string
      */
-    protected $signature = 'app:show-product-list {url} {--salepoint}';
+    protected $signature = 'show-product-list {url} {--salepoint}';
 
     /**
      * The console command description.
