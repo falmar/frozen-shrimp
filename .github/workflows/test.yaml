@@ -1,9 +1,7 @@
 name: PHPUnit Test
 on:
-  push:
-    branches: [ master ]
-    tags:
-      - 'v*'
+  workflow_call:
+    inputs: {}
   pull_request:
     branches: [ master ]
 
