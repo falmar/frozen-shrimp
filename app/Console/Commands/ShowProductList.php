@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Domains\Carrefour\CategoryRepositoryInterface;
-use App\Domains\Carrefour\Entities\Category;
+use App\Domains\Carrefour\CategoryServiceInterface;
 use App\Domains\Carrefour\Entities\Product;
-use App\Domains\Carrefour\ProductRepositoryInterface;
+use App\Domains\Carrefour\Specs\ShowProductListInput;
+use App\Libraries\Context\Context;
 use Illuminate\Console\Command;
 
 class ShowProductList extends Command
@@ -28,19 +28,17 @@ class ShowProductList extends Command
      * Execute the console command.
      */
     public function handle(
-        CategoryRepositoryInterface $categoryRepository,
-        ProductRepositoryInterface $productRepository
+        Context $context,
+        CategoryServiceInterface $categoryService,
     ): void {
         try {
-            /** @var Category|null $category */
-            $category = $categoryRepository->findByUrl($this->argument('url'));
+            $spec = new ShowProductListInput();
+            $spec->url = $this->argument('url');
 
-            if (is_null($category)) {
-                $this->error('Category not found');
-                return;
-            }
+            // get category products from service
+            $output = $categoryService->showProductList($context, $spec);
 
-            $products = $productRepository->listByCategoryId($category->id);
+            // output is responsibility of the command "transport layer"
             $products = array_map(
                 fn (Product $product) => [
                     'name' => $product->name,
@@ -48,7 +46,7 @@ class ShowProductList extends Command
                     'image_url' => $product->imageURL,
                     'url' => $product->url,
                 ],
-                $products
+                $output->products
             );
 
             $this->output->writeln(

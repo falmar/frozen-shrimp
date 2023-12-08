@@ -8,7 +8,7 @@ use Symfony\Component\HttpClient\HttpClient;
 /**
  * @codeCoverageIgnore
  */
-class CarrefourProvider extends \Illuminate\Support\ServiceProvider implements DeferrableProvider
+class ServiceProvider extends \Illuminate\Support\ServiceProvider implements DeferrableProvider
 {
     public function register(): void
     {
@@ -20,6 +20,8 @@ class CarrefourProvider extends \Illuminate\Support\ServiceProvider implements D
                 HttpClient::create(),
             );
         });
+
+        $this->app->bind(CategoryServiceInterface::class, CategoryService::class);
     }
 
     /**
