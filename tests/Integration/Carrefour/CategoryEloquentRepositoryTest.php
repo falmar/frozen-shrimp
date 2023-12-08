@@ -1,6 +1,6 @@
 <?php
 
-namespace Integration\Carrefour;
+namespace Tests\Integration\Carrefour;
 
 use App\Domains\Carrefour\CategoryEloquentRepository;
 use App\Domains\Carrefour\Entities\Category;

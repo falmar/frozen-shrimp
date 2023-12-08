@@ -42,6 +42,8 @@ class CategoryService implements CategoryServiceInterface
         $category = $this->handleCategory($context, $input, $contentHash);
         $this->handleProducts($context, $parserOutput, $category);
 
+        $response->category = $category;
+
         return $response;
     }
 
