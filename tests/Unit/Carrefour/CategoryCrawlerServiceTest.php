@@ -17,7 +17,8 @@ use Tests\TestCase;
  */
 class CategoryCrawlerServiceTest extends TestCase
 {
-    public function testCrawl_should_throw_exception_on_non_200_http_code(): void {
+    public function testCrawl_should_throw_exception_on_non_200_http_code(): void
+    {
         try {
             $context = AppContext::background();
 
