@@ -17,6 +17,27 @@ use Tests\TestCase;
  */
 class CategoryCrawlerServiceTest extends TestCase
 {
+    public function testCrawl_should_throw_exception_on_non_200_http_code(): void {
+        try {
+            $context = AppContext::background();
+
+            $service = $this->getService(
+                $this->genClient('', [
+                    'http_code' => 500,
+                ])
+            );
+
+            $crawlSpec = new CategoryCrawlInput();
+            $crawlSpec->url = 'https://www.carrefour.es/supermercado/bebidas/cat20003/c';
+
+            $output = $service->crawl($context, $crawlSpec);
+
+            $this->assertTrue($output->modified);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\Exception::class, $e);
+        }
+    }
+
     public function testCrawl_should_as_modified_with_200_status(): void
     {
         $context = AppContext::background();

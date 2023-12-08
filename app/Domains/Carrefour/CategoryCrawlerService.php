@@ -5,7 +5,6 @@ namespace App\Domains\Carrefour;
 use App\Domains\Carrefour\Specs\CategoryCrawlInput;
 use App\Domains\Carrefour\Specs\CategoryCrawlOutput;
 use App\Libraries\Context\Context;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 readonly class CategoryCrawlerService implements CategoryCrawlerServiceInterface
@@ -20,32 +19,32 @@ readonly class CategoryCrawlerService implements CategoryCrawlerServiceInterface
      */
     public function crawl(Context $context, CategoryCrawlInput $input): CategoryCrawlOutput
     {
-        try {
-            $response = $this->client->request(
-                'GET',
-                $input->url,
-                [
-                    'headers' => $input->headers,
-                    'timeout' => $input->timeout,
-                ]
-            );
+        // try {
+        $response = $this->client->request(
+            'GET',
+            $input->url,
+            [
+                'headers' => $input->headers,
+                'timeout' => $input->timeout,
+            ]
+        );
 
-            $output = new CategoryCrawlOutput();
-            $output->content = $response->getContent();
-            $output->headers = $this->parseHeaders($response->getHeaders());
-            $output->modified = $response->getStatusCode() !== 204;
+        $output = new CategoryCrawlOutput();
+        $output->content = $response->getContent();
+        $output->headers = $this->parseHeaders($response->getHeaders());
+        $output->modified = $response->getStatusCode() !== 204;
 
-            return $output;
-        } catch (TransportExceptionInterface $exception) {
-            // TODO: create exception classes to streamline "crawler" error handling
-            //  throw new CategoryCrawlerException(
-            //      "Error crawling category page: {$exception->getMessage()}",
-            //      $exception->getCode(),
-            //      $exception,
-            //  );
+        return $output;
+        // } catch (TransportExceptionInterface $exception) {
+        // TODO: create exception classes to streamline "crawler" error handling
+        //  throw new CategoryCrawlerException(
+        //      "Error crawling category page: {$exception->getMessage()}",
+        //      $exception->getCode(),
+        //      $exception,
+        //  );
 
-            throw $exception;
-        }
+        //     throw $exception;
+        // }
     }
 
     /**

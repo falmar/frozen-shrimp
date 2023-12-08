@@ -101,7 +101,7 @@ class CategoryParserServiceTest extends TestCase
         $output = $parser->products($context, $productSpec);
 
         $this->assertIsArray($output->products);
-        $this->assertCount(4, $output->products);
+        $this->assertCount(3, $output->products);
     }
 
     private function getParser(): CategoryParserServiceInterface

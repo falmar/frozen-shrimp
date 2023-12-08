@@ -154,7 +154,7 @@ class CategoryEloquentRepositoryTest extends TestCase
             'name' => 'Bebidas',
             'slug' => 'bebidas',
             'url' => 'https://www.carrefour.es/supermercado/bebidas/cat20003/c',
-            'last_crawl_at' => '2021-01-02 00:00:00',
+            'last_crawl_at' => '2021-01-02 00:00:00.000000',
             'last_crawl_hash' => sha1('https://www.carrefour.es/supermercado/bebidas/cat20003/c'),
             'deleted_at' => null
         ]);
@@ -187,7 +187,7 @@ class CategoryEloquentRepositoryTest extends TestCase
             'name' => 'Congelados mixed with magic numbers',
             'slug' => 'congelados-mixed',
             'url' => 'https://www.carrefour.es/supermercado/congelados/cat21449124/c',
-            'last_crawl_at' => '2021-01-03 00:00:00',
+            'last_crawl_at' => '2021-01-03 00:00:00.000000',
             'last_crawl_hash' => sha1('https://www.carrefour.es/supermercado/congelados/cat21449124/c'),
             'deleted_at' => null
         ]);
