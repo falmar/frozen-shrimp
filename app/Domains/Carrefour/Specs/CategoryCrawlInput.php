@@ -10,11 +10,8 @@ class CategoryCrawlInput
      */
     public string $url;
 
-    // Request options and defaults
-    /**
-     * @var int $timeout maximum time in seconds the request will wait for a response
-     */
-    public int $timeout = 10;
+    /** @var float $timeout maximum time in seconds the request will wait for a response */
+    public float $timeout = 10;
     /**
      * @var array<string, string> $headers additional headers to send with the request
      */

@@ -33,7 +33,7 @@ readonly class CategoryCrawlerService implements CategoryCrawlerServiceInterface
             $output = new CategoryCrawlOutput();
             $output->content = $response->getContent();
             $output->headers = $this->parseHeaders($response->getHeaders());
-            $output->modified = $response->getStatusCode() !== 304;
+            $output->modified = $response->getStatusCode() !== 204;
 
             return $output;
         } catch (TransportExceptionInterface $exception) {

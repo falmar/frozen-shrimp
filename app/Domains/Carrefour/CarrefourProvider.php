@@ -5,6 +5,9 @@ namespace App\Domains\Carrefour;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Symfony\Component\HttpClient\HttpClient;
 
+/**
+ * @codeCoverageIgnore
+ */
 class CarrefourProvider extends \Illuminate\Support\ServiceProvider implements DeferrableProvider
 {
     public function register(): void

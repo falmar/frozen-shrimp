@@ -84,6 +84,6 @@ readonly class ProductEloquentRepository implements ProductRepositoryInterface
      */
     public function delete(string $productId): bool
     {
-        return $this->eloquent->destroy($productId) > 0;
+        return (new $this->eloquent())->where('id', $productId)->delete();
     }
 }

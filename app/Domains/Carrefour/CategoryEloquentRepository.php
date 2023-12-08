@@ -71,6 +71,6 @@ readonly class CategoryEloquentRepository implements CategoryRepositoryInterface
      */
     public function delete(string $categoryId): bool
     {
-        return $this->eloquent->destroy($categoryId) > 0;
+        return (new $this->eloquent())->where('id', $categoryId)->delete();
     }
 }

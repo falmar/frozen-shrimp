@@ -15,11 +15,13 @@ readonly class CategoryParserService implements CategoryParserServiceInterface
         $output = new CategoryProductParserOutput();
 
         $crawler = $this->getProductCrawler($input->content);
-        $baseURI = $this->getBaseURI($input->url);
 
-        $output->products = $crawler
-            ->filter('.product-card-list__list > .product-card-list__item .product-card')
-            ->each(fn (Crawler $node) => $this->parseProduct($node, $baseURI));
+        $output->products = array_filter(
+            $crawler
+                ->filter('.product-card-list__list > .product-card-list__item .product-card')
+                ->each(fn (Crawler $node) => $this->parseProduct($node, $input->baseURI)),
+            fn (?CrawlCategoryProduct $product) => $product instanceof CrawlCategoryProduct
+        );
 
         return $output;
     }
@@ -30,27 +32,30 @@ readonly class CategoryParserService implements CategoryParserServiceInterface
         return new Crawler($content, useHtml5Parser: true);
     }
 
-    private function parseProduct(Crawler $node, string $baseURI): CrawlCategoryProduct
+    private function parseProduct(Crawler $node, string $baseURI): CrawlCategoryProduct|null
     {
-        $titleAnchor = $node->filter('h2.product-card__title .product-card__title-link.track-click');
+        $anchorEl = $node->filter('h2.product-card__title .product-card__title-link.track-click');
+        $priceElement = $node->filter('.product-card__price');
+        $imageEl = $node->filter('img.product-card__image');
 
-        return new CrawlCategoryProduct(
-            name: $titleAnchor->text(''),
-            url: $baseURI . $titleAnchor->attr('href'),
-            price: $node->filter('.product-card__price')->text(),
-            imageURL: $node->filter('.product-card__image')->attr('src') ?? '',
-        );
-    }
-
-    private function getBaseURI(string $url): string
-    {
-        $parsedURL = parse_url($url);
-        if ($parsedURL && isset($parsedURL['scheme'], $parsedURL['host'])) {
-            ['scheme' => $scheme,
-                'host' => $host,] = $parsedURL;
-            return $scheme . '://' . $host;
+        if ($anchorEl->count() === 0 || $priceElement->count() === 0 || $imageEl->count() === 0) {
+            return null;
         }
 
-        return '';
+        $name = $anchorEl->text('');
+        $url = $baseURI . $anchorEl->attr('href');
+        $price = $node->filter('.product-card__price')->text();
+        $imageURL = $node->filter('img.product-card__image')->attr('src');
+
+        if (empty($name) || empty($url) || empty($price) || empty($imageURL)) {
+            return null;
+        }
+
+        return new CrawlCategoryProduct(
+            name: $name,
+            url: $url,
+            price: $price,
+            imageURL: $imageURL,
+        );
     }
 }

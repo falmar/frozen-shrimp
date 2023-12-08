@@ -50,6 +50,15 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "format": [
+            "php-cs-fixer check --diff"
+        ],
+        "format-fix": [
+            "php-cs-fixer fix"
+        ],
+        "lint": [
+            "phpstan analyse"
         ]
     },
     "extra": {

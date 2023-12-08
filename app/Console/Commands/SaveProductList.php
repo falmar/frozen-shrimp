@@ -12,11 +12,14 @@ use App\Domains\Carrefour\Specs\CategoryCrawlInput;
 use App\Domains\Carrefour\Specs\CategoryProductParserInput;
 use App\Libraries\Context\Context;
 use App\Libraries\Hasher\HasherInterface;
+use App\Libraries\URLHelperTrait;
 use Cocur\Slugify\Slugify;
 use Illuminate\Console\Command;
 
 class SaveProductList extends Command
 {
+    use URLHelperTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -57,6 +60,7 @@ class SaveProductList extends Command
             // crawl the category page
             $crawlerSpec = new CategoryCrawlInput();
             $crawlerSpec->url = $this->argument('url');
+            $crawlerSpec->timeout = 5;
             $crawlerSpec->headers = [
                 'Cookie' => "salepoint={$salePoint}; Domain={$host}; Path=/; SameSite=None",
             ];
@@ -66,7 +70,7 @@ class SaveProductList extends Command
 
             // parse crawl output
             $parserSpec = new CategoryProductParserInput();
-            $parserSpec->url = $crawlerSpec->url;
+            $parserSpec->baseURI = $this->getBaseURIFromURL($crawlerSpec->url);
             $parserSpec->content = $crawlerOutput->content;
 
             $parserOutput = $categoryParser->products($context, $parserSpec);
