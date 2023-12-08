@@ -4,7 +4,7 @@ namespace Tests\Integration\Carrefour;
 
 use App\Domains\Carrefour\Entities\Product;
 use App\Domains\Carrefour\ProductEloquentRepository;
-use Database\Seeders\tests\Carrefour\DomainSeeder;
+use Database\Seeders\Tests\Carrefour\DomainSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\Uid\UuidV7;
 use Tests\TestCase;

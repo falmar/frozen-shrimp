@@ -85,7 +85,7 @@ class CategoryServiceTest extends TestCase
 
     public function testShowProductList(): void
     {
-        $this->seed(\Database\Seeders\tests\Carrefour\DomainSeeder::class);
+        $this->seed(\Database\Seeders\Tests\Carrefour\DomainSeeder::class);
 
         // given
         $context = AppContext::background();

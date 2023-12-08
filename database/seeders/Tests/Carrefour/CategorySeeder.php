@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\tests\Carrefour;
+namespace Database\Seeders\Tests\Carrefour;
 
 use App\Models\Category;
 use Illuminate\Database\Seeder;
